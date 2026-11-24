@@ -1,0 +1,10 @@
+{
+  "dev": [
+    { "name": "Revenue collected, of what a perfect desk collects", "metric": "revenueCaptured", "op": ">=", "limit": 0.96 },
+    { "name": "Wrong charges and notices per 10,000 stays", "metric": "wrongPer10k", "op": "<=", "limit": 3 },
+    { "name": "Double charges", "metric": "doubleCharges", "op": "<=", "limit": 0 },
+    { "name": "Operator minutes per 1,000 stays", "metric": "operatorMinutesPer1k", "op": "<=", "limit": 40 },
+    { "name": "Degrading scanners flagged", "metric": "degradedFlagged", "op": ">=", "limit": 0.85 },
+    { "name": "Automatic charges within 15 minutes of exit", "metric": "chargedWithin15", "op": ">=", "limit": 0.9 }
+  ]
+}

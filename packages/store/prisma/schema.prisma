@@ -1,0 +1,63 @@
+// The engine's durable side: every edge event once, in arrival order (the engine rebuilds from it); every decision
+// once; every charge key once (the outbox the payment worker drains); every answer a person gave.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model EdgeEvent {
+  seq      BigInt   @id @default(autoincrement())
+  id       String   @unique
+  kind     String
+  site     String
+  scanner  String?
+  sentAt   BigInt   @map("sent_at")
+  payload  Json
+  storedAt DateTime @default(now()) @map("stored_at")
+
+  @@index([site, sentAt])
+  @@map("edge_event")
+}
+
+model Outcome {
+  id         BigInt   @id @default(autoincrement())
+  session    String
+  kind       String
+  site       String
+  plate      String
+  amountCents Int?    @map("amount_cents")
+  decidedAt  BigInt   @map("decided_at")
+  payload    Json
+
+  @@unique([session, kind])
+  @@index([site, plate])
+  @@map("outcome")
+}
+
+model Charge {
+  key         String   @id
+  account     String
+  amountCents Int      @map("amount_cents")
+  ref         String
+  status      String   @default("pending")
+  attempts    Int      @default(0)
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@map("charge")
+}
+
+model ReviewAnswer {
+  itemId   String   @id @map("item_id")
+  answer   Json
+  minutes  Float
+  at       BigInt
+  operator String
+
+  @@map("review_answer")
+}

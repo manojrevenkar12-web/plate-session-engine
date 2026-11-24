@@ -1,0 +1,8 @@
+{
+  "shopping": { "freeMinutes": 60, "centsPerHour": 200, "dailyCapCents": 1500 },
+  "office": { "freeMinutes": 15, "centsPerHour": 250, "dailyCapCents": 1600 },
+  "residential": { "freeMinutes": 30, "centsPerHour": 150, "dailyCapCents": 1200 },
+  "hospital": { "freeMinutes": 30, "centsPerHour": 200, "dailyCapCents": 1400 },
+  "airport": { "freeMinutes": 10, "centsPerHour": 400, "dailyCapCents": 3200 },
+  "leisure": { "freeMinutes": 30, "centsPerHour": 250, "dailyCapCents": 1500 }
+}

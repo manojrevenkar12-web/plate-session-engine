@@ -1,0 +1,17 @@
+{
+  "main": ["status_quo", "fuzzy_match", "model_alone", "engine"],
+  "ablations": ["no_watermark", "no_skew", "no_evidence", "no_review", "no_agent", "no_idempotency", "no_quality"],
+  "designs": {
+    "status_quo": { "label": "Exact plate match, one session per plate, notice when no payment, retry on timeout", "baseline": "exact" },
+    "fuzzy_match": { "label": "Plus fuzzy matching: nearest plate one edit away, accepted without review", "baseline": "fuzzy" },
+    "model_alone": { "label": "Plus a vision model that picks the entry for every unmatched exit, unchecked", "baseline": "model" },
+    "engine": { "label": "plate-session-engine", "engine": {} },
+    "no_watermark": { "label": "Without holding exits for offline entry scanners", "engine": { "watermark": false } },
+    "no_skew": { "label": "Without scanner clock correction", "engine": { "skew": false } },
+    "no_evidence": { "label": "Plate distance only, no colour, make or length of stay", "engine": { "evidence": false } },
+    "no_review": { "label": "Best guess taken, no review and no model", "engine": { "review": false, "agent": false } },
+    "no_agent": { "label": "Every uncertain exit to an operator, no crop check", "engine": { "agent": false } },
+    "no_idempotency": { "label": "Retry after a payment timeout without an idempotency key", "engine": { "idempotency": false } },
+    "no_quality": { "label": "Without missed-exit handling and typed-plate payment matching", "engine": { "quality": false } }
+  }
+}

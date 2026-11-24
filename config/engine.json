@@ -1,0 +1,98 @@
+{
+  "dedupeWindowSeconds": 6,
+  "settleSeconds": 20,
+  "heartbeatMinutes": 5,
+  "reconnectSettleMinutes": 16,
+  "holdMaxHours": 24,
+  "noticeDelayMinutes": 90,
+  "skew": {
+    "samples": 9,
+    "minSeconds": 45
+  },
+  "stayPriors": {
+    "shopping": {
+      "median": 75,
+      "sigma": 0.7
+    },
+    "office": {
+      "median": 470,
+      "sigma": 0.45
+    },
+    "residential": {
+      "median": 700,
+      "sigma": 0.9
+    },
+    "hospital": {
+      "median": 110,
+      "sigma": 0.9
+    },
+    "airport": {
+      "median": 1600,
+      "sigma": 1.1
+    },
+    "leisure": {
+      "median": 140,
+      "sigma": 0.65
+    }
+  },
+  "match": {
+    "maxDistance": 1.6,
+    "coincidenceLogOdds": 9.0,
+    "plateWeight": 6.0,
+    "colour": {
+      "sameCar": 0.85,
+      "otherCar": 0.17
+    },
+    "make": {
+      "sameCar": 0.77,
+      "otherCar": 0.12
+    },
+    "stayToleranceSigma": 1.5,
+    "missedEntryLogWeight": 0.0,
+    "autoPosterior": 0.97,
+    "autoMissedEntry": 0.985
+  },
+  "agent": {
+    "acceptConfidence": 0.9,
+    "minPosterior": 0.08,
+    "missedEntryPosterior": 0.3
+  },
+  "payments": {
+    "maxDistance": 1.6,
+    "graceMinutes": 20
+  },
+  "notice": {
+    "minFeeCents": 100,
+    "minPosterior": 0.97,
+    "lookalikeDistance": 0.6
+  },
+  "billing": {
+    "maxAttempts": 3
+  },
+  "health": {
+    "window": 30,
+    "lowConfidence": 0.85,
+    "baseline": 0.1,
+    "slack": 0.06,
+    "threshold": 6,
+    "offlineMinutes": 15
+  },
+  "plateFormats": [
+    "^[A-Z\u00c4\u00d6\u00dc]{2,5}[1-9][0-9]{0,3}[EH]?$",
+    "^[A-Z]{1,2}[1-9][0-9]{0,4}[A-Z]{1,3}$"
+  ],
+  "samePassSeconds": 2.2,
+  "staleAfterSigma": 3.0,
+  "samePassMaxDistance": 3.0,
+  "reviewEconomics": {
+    "operatorCentsPerMinute": 60,
+    "minutes": {
+      "orphan-exit": 3.0,
+      "missed-exit": 5.0,
+      "plate": 1.5,
+      "payment": 2.5
+    },
+    "findRate": 0.85,
+    "noticePayRate": 0.8
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "plate-session-engine",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.28.0",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "test": "turbo run test",
+    "typecheck": "turbo run typecheck",
+    "build": "turbo run build",
+    "study": "tsx packages/lab/src/cli.ts study --world dev",
+    "heldout": "tsx packages/lab/src/cli.ts study --world heldout",
+    "readme": "tsx packages/lab/src/cli.ts readme",
+    "bench": "tsx packages/lab/src/cli.ts bench",
+    "api": "pnpm --filter @pse/api start",
+    "console": "pnpm --filter @pse/console dev",
+    "changeset": "changeset"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.29.7",
+    "@types/node": "^22.18.0",
+    "tsx": "^4.20.6",
+    "turbo": "^2.6.1",
+    "typescript": "~5.9.3",
+    "vitest": "^3.2.4"
+  }
+}

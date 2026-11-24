@@ -1,0 +1,8 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "typecheck": { "dependsOn": ["^typecheck"], "outputs": [] },
+    "test": { "outputs": [], "env": ["PSE_TEST_DATABASE_URL", "PSE_TEST_REDIS_URL"] },
+    "build": { "dependsOn": ["^build"], "outputs": ["dist/**", "storybook-static/**"] }
+  }
+}
