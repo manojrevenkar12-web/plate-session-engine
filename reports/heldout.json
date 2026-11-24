@@ -1,0 +1,433 @@
+{
+ "configHash": "4941c1a388df9a10",
+ "designs": {
+  "engine": {
+   "agentAccepted": 360,
+   "capturedCents": 26095250,
+   "chargedWithin15": 0.9522771962,
+   "collectibleCents": 27158800,
+   "degradedFlagged": 0.8148148148,
+   "degradedScanners": 27,
+   "doubleCharges": 0,
+   "falseDegradedAlarms": 16,
+   "flagLeadHours": 8.7,
+   "lostCents": 1063550,
+   "modelCalls": 611,
+   "noticesToPayers": 7,
+   "operatorMinutes": 5616,
+   "operatorMinutesPer1k": 42.57351436,
+   "overchargedCents": 2100,
+   "revenueCaptured": 0.9608395805,
+   "reviews": 2083,
+   "visits": 131913,
+   "wrongCharges": 4,
+   "wrongNotices": 23,
+   "wrongPer10k": 2.046803575
+  },
+  "fuzzy_match": {
+   "agentAccepted": 0,
+   "capturedCents": 24888300,
+   "chargedWithin15": 0.9875145663,
+   "collectibleCents": 27158800,
+   "degradedFlagged": 0,
+   "degradedScanners": 27,
+   "doubleCharges": 183,
+   "falseDegradedAlarms": 0,
+   "flagLeadHours": null,
+   "lostCents": 2270500,
+   "modelCalls": 0,
+   "noticesToPayers": 1069,
+   "operatorMinutes": 0,
+   "operatorMinutesPer1k": 0,
+   "overchargedCents": 250450,
+   "revenueCaptured": 0.9163991045,
+   "reviews": 0,
+   "visits": 131913,
+   "wrongCharges": 388,
+   "wrongNotices": 2283,
+   "wrongPer10k": 202.4819389
+  },
+  "model_alone": {
+   "agentAccepted": 0,
+   "capturedCents": 25004200,
+   "chargedWithin15": 0.9874206897,
+   "collectibleCents": 27158800,
+   "degradedFlagged": 0,
+   "degradedScanners": 27,
+   "doubleCharges": 181,
+   "falseDegradedAlarms": 0,
+   "flagLeadHours": null,
+   "lostCents": 2154600,
+   "modelCalls": 9809,
+   "noticesToPayers": 5830,
+   "operatorMinutes": 0,
+   "operatorMinutesPer1k": 0,
+   "overchargedCents": 223250,
+   "revenueCaptured": 0.9206665979,
+   "reviews": 0,
+   "visits": 131913,
+   "wrongCharges": 359,
+   "wrongNotices": 7325,
+   "wrongPer10k": 582.505136
+  },
+  "no_agent": {
+   "agentAccepted": 0,
+   "capturedCents": 26098250,
+   "chargedWithin15": 0.9522316684,
+   "collectibleCents": 27158800,
+   "degradedFlagged": 0.8148148148,
+   "degradedScanners": 27,
+   "doubleCharges": 0,
+   "falseDegradedAlarms": 16,
+   "flagLeadHours": 8.7,
+   "lostCents": 1060550,
+   "modelCalls": 0,
+   "noticesToPayers": 7,
+   "operatorMinutes": 7064.5,
+   "operatorMinutesPer1k": 53.5542365,
+   "overchargedCents": 2100,
+   "revenueCaptured": 0.960950042,
+   "reviews": 2440,
+   "visits": 131913,
+   "wrongCharges": 2,
+   "wrongNotices": 23,
+   "wrongPer10k": 1.895188495
+  },
+  "no_evidence": {
+   "agentAccepted": 834,
+   "capturedCents": 26096000,
+   "chargedWithin15": 0.9522771962,
+   "collectibleCents": 27158800,
+   "degradedFlagged": 0.8148148148,
+   "degradedScanners": 27,
+   "doubleCharges": 0,
+   "falseDegradedAlarms": 16,
+   "flagLeadHours": 8.7,
+   "lostCents": 1062800,
+   "modelCalls": 1421,
+   "noticesToPayers": 6,
+   "operatorMinutes": 6099.1,
+   "operatorMinutesPer1k": 46.23577661,
+   "overchargedCents": 2100,
+   "revenueCaptured": 0.9608671959,
+   "reviews": 2417,
+   "visits": 131913,
+   "wrongCharges": 4,
+   "wrongNotices": 22,
+   "wrongPer10k": 1.970996035
+  },
+  "no_idempotency": {
+   "agentAccepted": 360,
+   "capturedCents": 26095250,
+   "chargedWithin15": 0.9522771962,
+   "collectibleCents": 27158800,
+   "degradedFlagged": 0.8148148148,
+   "degradedScanners": 27,
+   "doubleCharges": 192,
+   "falseDegradedAlarms": 16,
+   "flagLeadHours": 8.7,
+   "lostCents": 1063550,
+   "modelCalls": 611,
+   "noticesToPayers": 7,
+   "operatorMinutes": 5616,
+   "operatorMinutesPer1k": 42.57351436,
+   "overchargedCents": 2100,
+   "revenueCaptured": 0.9608395805,
+   "reviews": 2083,
+   "visits": 131913,
+   "wrongCharges": 4,
+   "wrongNotices": 23,
+   "wrongPer10k": 2.046803575
+  },
+  "no_quality": {
+   "agentAccepted": 563,
+   "capturedCents": 25885900,
+   "chargedWithin15": 0.96285745,
+   "collectibleCents": 27158800,
+   "degradedFlagged": 0.8148148148,
+   "degradedScanners": 27,
+   "doubleCharges": 0,
+   "falseDegradedAlarms": 16,
+   "flagLeadHours": 8.7,
+   "lostCents": 1272900,
+   "modelCalls": 954,
+   "noticesToPayers": 5962,
+   "operatorMinutes": 582.6,
+   "operatorMinutesPer1k": 4.41654727,
+   "overchargedCents": 12150,
+   "revenueCaptured": 0.9531312135,
+   "reviews": 391,
+   "visits": 131913,
+   "wrongCharges": 12,
+   "wrongNotices": 6139,
+   "wrongPer10k": 466.2921774
+  },
+  "no_review": {
+   "agentAccepted": 0,
+   "capturedCents": 25198850,
+   "chargedWithin15": 0.9637646045,
+   "collectibleCents": 27158800,
+   "degradedFlagged": 0.8148148148,
+   "degradedScanners": 27,
+   "doubleCharges": 0,
+   "falseDegradedAlarms": 16,
+   "flagLeadHours": 8.7,
+   "lostCents": 1959950,
+   "modelCalls": 0,
+   "noticesToPayers": 5,
+   "operatorMinutes": 0,
+   "operatorMinutesPer1k": 0,
+   "overchargedCents": 4900,
+   "revenueCaptured": 0.927833704,
+   "reviews": 0,
+   "visits": 131913,
+   "wrongCharges": 8,
+   "wrongNotices": 15,
+   "wrongPer10k": 1.743573416
+  },
+  "no_skew": {
+   "agentAccepted": 362,
+   "capturedCents": 25801200,
+   "chargedWithin15": 0.9437021873,
+   "collectibleCents": 27158800,
+   "degradedFlagged": 0.8148148148,
+   "degradedScanners": 27,
+   "doubleCharges": 0,
+   "falseDegradedAlarms": 16,
+   "flagLeadHours": 8.7,
+   "lostCents": 1357600,
+   "modelCalls": 614,
+   "noticesToPayers": 8,
+   "operatorMinutes": 5817,
+   "operatorMinutesPer1k": 44.09724591,
+   "overchargedCents": 61200,
+   "revenueCaptured": 0.950012519,
+   "reviews": 2155,
+   "visits": 131913,
+   "wrongCharges": 227,
+   "wrongNotices": 341,
+   "wrongPer10k": 43.05868262
+  },
+  "no_watermark": {
+   "agentAccepted": 363,
+   "capturedCents": 26088450,
+   "chargedWithin15": 0.9732480682,
+   "collectibleCents": 27158800,
+   "degradedFlagged": 0.8148148148,
+   "degradedScanners": 27,
+   "doubleCharges": 0,
+   "falseDegradedAlarms": 16,
+   "flagLeadHours": 8.7,
+   "lostCents": 1070350,
+   "modelCalls": 617,
+   "noticesToPayers": 7,
+   "operatorMinutes": 6154.9,
+   "operatorMinutesPer1k": 46.65878268,
+   "overchargedCents": 3700,
+   "revenueCaptured": 0.9605892013,
+   "reviews": 2193,
+   "visits": 131913,
+   "wrongCharges": 6,
+   "wrongNotices": 26,
+   "wrongPer10k": 2.425841274
+  },
+  "status_quo": {
+   "agentAccepted": 0,
+   "capturedCents": 23699500,
+   "chargedWithin15": 0.9873342803,
+   "collectibleCents": 27158800,
+   "degradedFlagged": 0,
+   "degradedScanners": 27,
+   "doubleCharges": 161,
+   "falseDegradedAlarms": 0,
+   "flagLeadHours": null,
+   "lostCents": 3459300,
+   "modelCalls": 0,
+   "noticesToPayers": 5662,
+   "operatorMinutes": 0,
+   "operatorMinutesPer1k": 0,
+   "overchargedCents": 366100,
+   "revenueCaptured": 0.8726269202,
+   "reviews": 0,
+   "visits": 131913,
+   "wrongCharges": 458,
+   "wrongNotices": 6106,
+   "wrongPer10k": 497.6006914
+  }
+ },
+ "events": 998097,
+ "gates": [
+  {
+   "limit": 0.96,
+   "metric": "revenueCaptured",
+   "name": "Revenue collected, of what a perfect desk collects",
+   "op": ">=",
+   "pass": true,
+   "value": 0.9608395805
+  },
+  {
+   "limit": 3,
+   "metric": "wrongPer10k",
+   "name": "Wrong charges and notices per 10,000 stays",
+   "op": "<=",
+   "pass": true,
+   "value": 2.046803575
+  },
+  {
+   "limit": 0,
+   "metric": "doubleCharges",
+   "name": "Double charges",
+   "op": "<=",
+   "pass": true,
+   "value": 0
+  },
+  {
+   "limit": 40,
+   "metric": "operatorMinutesPer1k",
+   "name": "Operator minutes per 1,000 stays",
+   "op": "<=",
+   "pass": false,
+   "value": 42.57351436
+  },
+  {
+   "limit": 0.85,
+   "metric": "degradedFlagged",
+   "name": "Degrading scanners flagged",
+   "op": ">=",
+   "pass": false,
+   "value": 0.8148148148
+  },
+  {
+   "limit": 0.9,
+   "metric": "chargedWithin15",
+   "name": "Automatic charges within 15 minutes of exit",
+   "op": ">=",
+   "pass": true,
+   "value": 0.9522771962
+  }
+ ],
+ "perSeed": {
+  "101": {
+   "engine": {
+    "operatorMinutesPer1k": 45.40982626,
+    "revenueCaptured": 0.9574592625,
+    "wrongPer10k": 1.943721779
+   },
+   "fuzzy_match": {
+    "operatorMinutesPer1k": 0,
+    "revenueCaptured": 0.9126826005,
+    "wrongPer10k": 207.8287133
+   },
+   "model_alone": {
+    "operatorMinutesPer1k": 0,
+    "revenueCaptured": 0.9165291179,
+    "wrongPer10k": 582.6679824
+   },
+   "no_agent": {
+    "operatorMinutesPer1k": 56.92862056,
+    "revenueCaptured": 0.9574883477,
+    "wrongPer10k": 1.794204719
+   },
+   "no_evidence": {
+    "operatorMinutesPer1k": 49.15223827,
+    "revenueCaptured": 0.9576701302,
+    "wrongPer10k": 1.794204719
+   },
+   "no_idempotency": {
+    "operatorMinutesPer1k": 45.40982626,
+    "revenueCaptured": 0.9574592625,
+    "wrongPer10k": 1.943721779
+   },
+   "no_quality": {
+    "operatorMinutesPer1k": 4.835381717,
+    "revenueCaptured": 0.9496971504,
+    "wrongPer10k": 456.4755839
+   },
+   "no_review": {
+    "operatorMinutesPer1k": 0,
+    "revenueCaptured": 0.922226181,
+    "wrongPer10k": 2.093238839
+   },
+   "no_skew": {
+    "operatorMinutesPer1k": 46.9947071,
+    "revenueCaptured": 0.9461814771,
+    "wrongPer10k": 48.59304447
+   },
+   "no_watermark": {
+    "operatorMinutesPer1k": 44.73998983,
+    "revenueCaptured": 0.9565067223,
+    "wrongPer10k": 1.943721779
+   },
+   "status_quo": {
+    "operatorMinutesPer1k": 0,
+    "revenueCaptured": 0.8680695427,
+    "wrongPer10k": 497.5927753
+   }
+  },
+  "102": {
+   "engine": {
+    "operatorMinutesPer1k": 39.65647153,
+    "revenueCaptured": 0.9643072929,
+    "wrongPer10k": 2.152819425
+   },
+   "fuzzy_match": {
+    "operatorMinutesPer1k": 0,
+    "revenueCaptured": 0.9202116947,
+    "wrongPer10k": 196.9829773
+   },
+   "model_alone": {
+    "operatorMinutesPer1k": 0,
+    "revenueCaptured": 0.924911048,
+    "wrongPer10k": 582.3376543
+   },
+   "no_agent": {
+    "operatorMinutesPer1k": 50.08380618,
+    "revenueCaptured": 0.9645012345,
+    "wrongPer10k": 1.999046609
+   },
+   "no_evidence": {
+    "operatorMinutesPer1k": 43.23630269,
+    "revenueCaptured": 0.9641469182,
+    "wrongPer10k": 2.152819425
+   },
+   "no_idempotency": {
+    "operatorMinutesPer1k": 39.65647153,
+    "revenueCaptured": 0.9643072929,
+    "wrongPer10k": 2.152819425
+   },
+   "no_quality": {
+    "operatorMinutesPer1k": 3.985791392,
+    "revenueCaptured": 0.9566540605,
+    "wrongPer10k": 476.3881841
+   },
+   "no_review": {
+    "operatorMinutesPer1k": 0,
+    "revenueCaptured": 0.9335862033,
+    "wrongPer10k": 1.383955344
+   },
+   "no_skew": {
+    "operatorMinutesPer1k": 41.11731328,
+    "revenueCaptured": 0.9539426082,
+    "wrongPer10k": 37.3667943
+   },
+   "no_watermark": {
+    "operatorMinutesPer1k": 48.6321908,
+    "revenueCaptured": 0.9647772283,
+    "wrongPer10k": 2.921683505
+   },
+   "status_quo": {
+    "operatorMinutesPer1k": 0,
+    "revenueCaptured": 0.8773021237,
+    "wrongPer10k": 497.6088327
+   }
+  }
+ },
+ "scanners": 474,
+ "seeds": [
+  101,
+  102
+ ],
+ "sites": 135,
+ "visits": 145257,
+ "world": "heldout"
+}
