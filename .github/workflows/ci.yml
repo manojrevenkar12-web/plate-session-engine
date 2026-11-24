@@ -1,0 +1,92 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  checks:
+    name: typecheck and tests (Postgres, Redis)
+    runs-on: ubuntu-24.04
+    services:
+      postgres:
+        image: postgres:16
+        env: { POSTGRES_USER: pse, POSTGRES_PASSWORD: pse, POSTGRES_DB: pse }
+        ports: ["5432:5432"]
+        options: --health-cmd "pg_isready -U pse" --health-interval 3s --health-retries 20
+      redis:
+        image: redis:7
+        ports: ["6379:6379"]
+    env:
+      PSE_TEST_DATABASE_URL: postgresql://pse:pse@localhost:5432/pse
+      PSE_TEST_REDIS_URL: redis://localhost:6379
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "22", cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @pse/store generate
+      - run: pnpm typecheck
+      - run: pnpm test
+
+  study:
+    name: study reproduces, gates pass, held-out locked
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "22", cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - name: the dev study reproduces the committed report, and its gates pass
+        run: |
+          cp reports/dev.json /tmp/dev.committed.json
+          pnpm study
+          cmp reports/dev.json /tmp/dev.committed.json
+      - name: the README matches the reports
+        run: |
+          pnpm readme
+          git diff --exit-code README.md
+      - name: the held-out world is locked, committed once, and refuses a second run
+        shell: bash {0}
+        run: |
+          test -f reports/heldout.lock || { echo "the held-out world has not run"; exit 1; }
+          n=$(git log --format=%H -- reports/heldout.lock | wc -l); echo "commits touching the lock: $n"; test "$n" -le 1 || exit 1
+          pnpm heldout; test $? -eq 3
+
+  console:
+    name: console, tests, build and Storybook
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "22", cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @pse/console build
+      - run: pnpm --filter @pse/console build-storybook
+
+  infra:
+    name: terraform, image and Lambda bundle
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with: { terraform_version: "1.13.3" }
+      - name: terraform fmt and validate
+        working-directory: infra/terraform
+        run: |
+          terraform fmt -check -recursive
+          terraform init -backend=false
+          terraform validate
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "22", cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @pse/store generate
+      - run: pnpm --filter @pse/api bundle:lambda
+      - name: the API image builds
+        run: docker build -t plate-session-engine/api:ci .

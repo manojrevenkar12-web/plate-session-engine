@@ -1,0 +1,77 @@
+# GitLab CI: the same checks as .github/workflows/ci.yml, plus image build and deploys.
+stages: [check, study, build, deploy]
+
+default:
+  image: node:22
+  before_script:
+    - corepack enable
+    - pnpm install --frozen-lockfile
+    - pnpm --filter @pse/store generate
+  cache:
+    key: { files: [pnpm-lock.yaml] }
+    paths: [.pnpm-store]
+
+variables:
+  PSE_TEST_DATABASE_URL: postgresql://pse:pse@postgres:5432/pse
+  PSE_TEST_REDIS_URL: redis://redis:6379
+  POSTGRES_USER: pse
+  POSTGRES_PASSWORD: pse
+  POSTGRES_DB: pse
+
+typecheck-and-test:
+  stage: check
+  services: [postgres:16, redis:7]
+  script:
+    - pnpm typecheck
+    - pnpm test
+
+study:
+  stage: study
+  script:
+    - cp reports/dev.json /tmp/dev.committed.json
+    - pnpm study
+    - cmp reports/dev.json /tmp/dev.committed.json
+    - pnpm readme && git diff --exit-code README.md
+    - test -f reports/heldout.lock
+    - pnpm heldout; test $? -eq 3
+
+terraform:
+  stage: check
+  image: { name: hashicorp/terraform:1.13, entrypoint: [""] }
+  before_script: []
+  script:
+    - cd infra/terraform
+    - terraform fmt -check -recursive
+    - terraform init -backend=false
+    - terraform validate
+
+image:
+  stage: build
+  image: { name: gcr.io/kaniko-project/executor:debug, entrypoint: [""] }
+  before_script: []
+  script:
+    - /kaniko/executor --context "$CI_PROJECT_DIR" --dockerfile Dockerfile --destination "$ECR_REPOSITORY:$CI_COMMIT_SHORT_SHA"
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+deploy-staging:
+  stage: deploy
+  image: { name: bitnami/kubectl:1.33, entrypoint: [""] }
+  before_script: []
+  environment: staging
+  script:
+    - cd deploy/k8s && kubectl kustomize . | sed "s#plate-session-engine/api:dev#$ECR_REPOSITORY:$CI_COMMIT_SHORT_SHA#" | kubectl apply -f -
+    - kubectl -n parking rollout status statefulset/pse-engine --timeout=10m
+    - kubectl -n parking rollout status deployment/pse-ingest --timeout=5m
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+deploy-ingest-lambda:
+  stage: deploy
+  environment: staging
+  script:
+    - pnpm --filter @pse/api bundle:lambda
+    - cd apps/api && npx serverless deploy --stage staging
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: manual

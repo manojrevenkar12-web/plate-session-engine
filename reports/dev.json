@@ -479,6 +479,118 @@
    }
   }
  },
+ "samples": {
+  "lookalike": [
+   {
+    "amountCents": 200,
+    "billed": "EDDB2088",
+    "entry": [
+     "EDDB2088"
+    ],
+    "exit": [
+     "EDDB20Y8"
+    ],
+    "site": "site-128"
+   },
+   {
+    "amountCents": 200,
+    "billed": "AMK4370",
+    "entry": [
+     "AMK4370"
+    ],
+    "exit": [
+     "ANK4370"
+    ],
+    "site": "site-067"
+   },
+   {
+    "amountCents": 400,
+    "billed": "NE6903",
+    "entry": [
+     "NE69O3"
+    ],
+    "exit": [
+     "NE6903"
+    ],
+    "site": "site-100"
+   },
+   {
+    "amountCents": 400,
+    "billed": "WMUN7018",
+    "entry": [
+     "WMUN7018"
+    ],
+    "exit": [
+     "WMU97018"
+    ],
+    "site": "site-142"
+   }
+  ],
+  "plateCheck": [
+   {
+    "amountCents": 1200,
+    "billed": "DAHU7644",
+    "read": [
+     "DAHU7644",
+     "DANU7G44"
+    ],
+    "site": "site-143"
+   },
+   {
+    "amountCents": 400,
+    "billed": "MNG48",
+    "read": [
+     "MNG48",
+     "MNG4"
+    ],
+    "site": "site-083"
+   },
+   {
+    "amountCents": 400,
+    "billed": "FSA3347",
+    "read": [
+     "FSA3347",
+     "FFA3347"
+    ],
+    "site": "site-138"
+   },
+   {
+    "amountCents": 400,
+    "billed": "SBS7315",
+    "read": [
+     "SBS7315",
+     "S8S7315"
+    ],
+    "site": "site-039"
+   }
+  ],
+  "typedPayment": [
+   {
+    "amountCents": 0,
+    "plate": "NXS3641",
+    "site": "site-098",
+    "typed": "NXS2641"
+   },
+   {
+    "amountCents": 0,
+    "plate": "EDHI5938",
+    "site": "site-128",
+    "typed": "DEHI5938"
+   },
+   {
+    "amountCents": 0,
+    "plate": "INCO58",
+    "site": "site-096",
+    "typed": "ICO58"
+   },
+   {
+    "amountCents": 0,
+    "plate": "LAWV15",
+    "site": "site-064",
+    "typed": "LWAV15"
+   }
+  ]
+ },
  "scanners": 513.3333333,
  "seeds": [
   1,

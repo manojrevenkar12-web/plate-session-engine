@@ -1,0 +1,40 @@
+# The edge ingest endpoint as a Lambda behind an HTTP API. Build first: `pnpm --filter @pse/api bundle:lambda`.
+service: plate-session-engine-ingest
+frameworkVersion: "4"
+
+provider:
+  name: aws
+  runtime: nodejs22.x
+  architecture: arm64
+  region: eu-central-1
+  memorySize: 512
+  timeout: 10
+  logRetentionInDays: 30
+  tracing:
+    lambda: true
+  environment:
+    NODE_OPTIONS: --enable-source-maps
+    PSE_SHARDS: ${param:shards, '4'}
+    DATABASE_URL: ${ssm:/pse/${sls:stage}/database-url}
+    REDIS_URL: ${ssm:/pse/${sls:stage}/redis-url}
+    PSE_EDGE_TOKEN: ${ssm:/pse/${sls:stage}/edge-token}
+  vpc:
+    securityGroupIds: ["${param:lambdaSecurityGroup}"]
+    subnetIds: ${param:privateSubnets}
+  httpApi:
+    throttle:
+      burstLimit: 2000
+      rateLimit: 1000
+
+package:
+  individually: true
+  patterns: ["!**", "dist/lambda/**", "demo/sites.json"]
+
+functions:
+  ingest:
+    handler: dist/lambda/lambda.handler
+    reservedConcurrency: 200
+    events:
+      - httpApi:
+          method: POST
+          path: /v1/edge/events

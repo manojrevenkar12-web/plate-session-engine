@@ -1,0 +1,37 @@
+[
+  {
+    "name": "[pse] Edge queue backlog on a shard",
+    "type": "query alert",
+    "query": "max(last_10m):max:pse.queue_depth{env:staging} > 5000",
+    "message": "An engine pod is down or too slow: decisions for its sites are waiting. Runbook: docs/RUNBOOK.md#queue-backlog @pagerduty-parking-platform",
+    "options": { "thresholds": { "critical": 5000, "warning": 1000 }, "notify_no_data": true, "no_data_timeframe": 15 }
+  },
+  {
+    "name": "[pse] Ingest p99 above 300 ms",
+    "type": "query alert",
+    "query": "avg(last_10m):max:pse.ingest_latency_ms.quantile{quantile:0.99,env:staging} > 300",
+    "message": "Edge devices will buffer and resend. Runbook: docs/RUNBOOK.md#ingest-slow @slack-parking-platform",
+    "options": { "thresholds": { "critical": 300, "warning": 200 } }
+  },
+  {
+    "name": "[pse] Scanners degraded",
+    "type": "query alert",
+    "query": "max(last_15m):max:pse.scanners_degraded{env:staging} > 0",
+    "message": "A scanner's read quality is drifting (dirty lens, misaligned camera). Open a field-service ticket. Runbook: docs/RUNBOOK.md#scanner-degraded @slack-field-service",
+    "options": { "thresholds": { "critical": 0 } }
+  },
+  {
+    "name": "[pse] Reviews waiting",
+    "type": "query alert",
+    "query": "max(last_30m):max:pse.reviews_waiting{env:staging} > 200",
+    "message": "The operator queue is growing faster than it is answered; charges and notices wait. Runbook: docs/RUNBOOK.md#review-queue @slack-parking-ops",
+    "options": { "thresholds": { "critical": 200, "warning": 100 } }
+  },
+  {
+    "name": "[pse] Charges failing at the payment provider",
+    "type": "query alert",
+    "query": "sum(last_15m):sum:pse.charge_attempts_failed.count{env:staging}.as_count() > 50",
+    "message": "The payment provider is failing; charges stay in the outbox and are retried with the same key. Runbook: docs/RUNBOOK.md#psp-outage @pagerduty-parking-platform",
+    "options": { "thresholds": { "critical": 50, "warning": 10 } }
+  }
+]

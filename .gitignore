@@ -11,3 +11,4 @@ infra/terraform/**/.terraform/
 infra/terraform/**/*.tfstate*
 packages/store/src/generated/
 apps/console/public/data/
+*.rdb

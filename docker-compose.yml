@@ -1,0 +1,25 @@
+# Local stack: Postgres, Redis and the API in "all" mode. `docker compose up`, then POST to :3000/v1/edge/events.
+services:
+  postgres:
+    image: postgres:16
+    environment: { POSTGRES_USER: pse, POSTGRES_PASSWORD: pse, POSTGRES_DB: pse }
+    ports: ["5432:5432"]
+    healthcheck: { test: ["CMD", "pg_isready", "-U", "pse"], interval: 3s, retries: 20 }
+  redis:
+    image: redis:7
+    ports: ["6379:6379"]
+  migrate:
+    build: .
+    command: ["node", "--import", "tsx", "../../packages/store/src/migrate-cli.ts"]
+    environment: { DATABASE_URL: postgresql://pse:pse@postgres:5432/pse }
+    depends_on: { postgres: { condition: service_healthy } }
+  api:
+    build: .
+    environment:
+      DATABASE_URL: postgresql://pse:pse@postgres:5432/pse
+      REDIS_URL: redis://redis:6379
+      PSE_SHARDS: "2"
+    ports: ["3000:3000"]
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+      redis: { condition: service_started }

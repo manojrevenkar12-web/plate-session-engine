@@ -1,0 +1,72 @@
+/* Parking signage: traffic blue for the platform, road-marking yellow for what needs a person, signal red for
+   what went wrong. Grey concrete and asphalt carry everything else. */
+:root {
+  --concrete: #e3e6e9;
+  --surface: #f5f6f7;
+  --surface-sunk: #d3d8dc;
+  --asphalt: #1f2326;
+  --ink: #1f2326;
+  --ink-2: #48505a;
+  --ink-3: #66707a;
+  --line: #b6bdc4;
+  --sign-blue: #0a5aa8;
+  --sign-blue-soft: #d4e2f1;
+  --marking: #f2c200;
+  --marking-ink: #6b5400;
+  --marking-soft: #fbeeb3;
+  --signal: #c2302a;
+  --signal-soft: #f4d6d3;
+  --plate: #ffffff;
+  --plate-edge: #1f2326;
+  --eu: #0b3b8c;
+  --focus: #0a5aa8;
+
+  --font: "Overpass", system-ui, sans-serif;
+  --font-plate: "Overpass Mono", ui-monospace, monospace;
+  --step--1: 0.8125rem;
+  --step-0: 1rem;
+  --step-1: 1.1875rem;
+  --step-2: 1.5rem;
+  --step-3: 2.75rem;
+  --lh-tight: 1.08;
+  --lh-body: 1.5;
+
+  --s1: 0.25rem;
+  --s2: 0.5rem;
+  --s3: 0.75rem;
+  --s4: 1rem;
+  --s5: 1.5rem;
+  --s6: 2rem;
+  --s7: 3rem;
+  --s8: 4.5rem;
+  --radius-plate: 4px;
+  --radius: 2px;
+  --hair: 1px;
+  --rule: 2px;
+  --page: 1180px;
+  --measure: 64ch;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --concrete: #191c1f;
+    --surface: #23272b;
+    --surface-sunk: #121416;
+    --ink: #e6e9ec;
+    --ink-2: #b6bec6;
+    --ink-3: #8a949d;
+    --line: #3b4249;
+    --sign-blue: #5ea3ea;
+    --sign-blue-soft: #1d3247;
+    --marking: #f5cf3a;
+    --marking-ink: #f5cf3a;
+    --marking-soft: #3b3215;
+    --signal: #f07d72;
+    --signal-soft: #4a2321;
+    --plate: #eef0f2;
+    --plate-edge: #0d0f10;
+    --eu: #2f5fb8;
+    --focus: #5ea3ea;
+  }
+}

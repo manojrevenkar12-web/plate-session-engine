@@ -26,6 +26,24 @@ export class PrismaStore implements Store {
     }
   }
 
+  /** One INSERT for the whole batch; the unique id makes it idempotent, RETURNING says which rows were new. */
+  async appendEvents(events: EdgeEvent[]): Promise<Set<string>> {
+    if (events.length === 0) return new Set();
+    const rows = await this.db.$queryRawUnsafe<{ id: string }[]>(
+      `INSERT INTO "edge_event" ("id", "kind", "site", "scanner", "sent_at", "payload")
+       SELECT t.id, t.kind, t.site, t.scanner, t.sent_at, t.payload FROM unnest($1::text[], $2::text[], $3::text[], $4::text[], $5::text[]::bigint[], $6::text[]::jsonb[]) WITH ORDINALITY AS t(id, kind, site, scanner, sent_at, payload, n)
+       ORDER BY t.n
+       ON CONFLICT ("id") DO NOTHING RETURNING "id"`,
+      events.map((e) => e.id),
+      events.map((e) => e.kind),
+      events.map((e) => e.site),
+      events.map((e) => ("scanner" in e ? e.scanner : null)),
+      events.map((e) => String(e.sentAt)),
+      events.map((e) => JSON.stringify(e)),
+    );
+    return new Set(rows.map((r) => r.id));
+  }
+
   async *events(): AsyncIterable<EdgeEvent> {
     let after = 0n;
     for (;;) {

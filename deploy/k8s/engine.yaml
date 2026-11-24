@@ -1,0 +1,62 @@
+# One engine per shard: pod N consumes queue edge-N, alone, in order. Its state is rebuilt from Postgres on start,
+# so a pod moved by Karpenter loses nothing. On-demand nodes only; never Spot.
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: pse-engine
+  labels: { app: pse, role: engine }
+spec:
+  serviceName: pse-engine
+  replicas: 4 # = PSE_SHARDS
+  podManagementPolicy: Parallel
+  selector:
+    matchLabels: { app: pse, role: engine }
+  template:
+    metadata:
+      labels: { app: pse, role: engine }
+    spec:
+      nodeSelector:
+        karpenter.sh/capacity-type: on-demand
+      terminationGracePeriodSeconds: 60
+      containers:
+        - name: api
+          image: plate-session-engine/api
+          env:
+            - { name: PSE_ROLE, value: engine }
+            - name: PSE_SHARD
+              valueFrom:
+                fieldRef: { fieldPath: "metadata.labels['apps.kubernetes.io/pod-index']" }
+          envFrom:
+            - configMapRef: { name: pse-config }
+            - secretRef: { name: pse-secrets }
+          ports:
+            - containerPort: 3000
+          readinessProbe:
+            httpGet: { path: /readyz, port: 3000 }
+            periodSeconds: 5
+          startupProbe:
+            httpGet: { path: /readyz, port: 3000 }
+            failureThreshold: 60
+            periodSeconds: 5
+          resources:
+            requests: { cpu: "1", memory: 1Gi }
+            limits: { memory: 2Gi }
+          securityContext:
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+          volumeMounts:
+            - { name: tmp, mountPath: /tmp }
+      volumes:
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pse-engine
+spec:
+  clusterIP: None
+  selector: { app: pse, role: engine }
+  ports:
+    - port: 3000

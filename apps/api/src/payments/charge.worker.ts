@@ -2,7 +2,7 @@ import { Inject, Injectable, Logger, type OnModuleDestroy, type OnModuleInit } f
 import type { Store } from "@pse/store";
 import { Queue, Worker } from "bullmq";
 import { EngineService } from "../engine/engine.service.js";
-import { jobId } from "../engine/queue.service.js";
+import { jobId } from "../job-id.js";
 import { SETTINGS, type Settings, STORE } from "../settings.js";
 import { METRICS, type Metrics } from "../telemetry/metrics.js";
 import { HttpPsp, type PspClient, SandboxPsp } from "./psp.js";

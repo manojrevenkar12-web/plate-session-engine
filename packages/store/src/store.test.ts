@@ -40,6 +40,14 @@ function contract(name: string, make: () => Promise<Store>) {
       expect(ids).toEqual(["a", "b"]);
     });
 
+    it("stores a batch in one write and says which events were new", async () => {
+      const fresh = await store.appendEvents([ev("c", 3), ev("a", 2), ev("d", 4), ev("c", 3)]);
+      expect([...fresh].sort()).toEqual(["c", "d"]);
+      const ids: string[] = [];
+      for await (const e of store.events()) ids.push(e.id);
+      expect(ids).toEqual(["a", "b", "c", "d"]);
+    });
+
     it("keeps a decision and a charge key once", async () => {
       expect(await store.saveOutcome(out("s1"))).toBe(true);
       expect(await store.saveOutcome(out("s1"))).toBe(false);

@@ -36,8 +36,6 @@ export class IngestController {
     const parsed = batchSchema.safeParse(body);
     if (!parsed.success) throw new BadRequestException(parsed.error.issues.slice(0, 5).map((i) => `${i.path.join(".")}: ${i.message}`));
     const receivedAt = Date.now();
-    const fresh: EdgeEvent[] = [];
-    let duplicates = 0;
     for (const raw of parsed.data.events) {
       if (raw.kind !== "payment") {
         const owner = this.scannerSite.get(raw.scanner);
@@ -45,10 +43,12 @@ export class IngestController {
       } else if (!this.knownSites.has(raw.site)) {
         throw new UnprocessableEntityException(`unknown site ${raw.site}`);
       }
-      const e = { ...raw, sentAt: receivedAt } as EdgeEvent;
-      if (await this.store.appendEvent(e)) fresh.push(e);
-      else duplicates++;
     }
+    const events = parsed.data.events.map((raw) => ({ ...raw, sentAt: receivedAt }) as EdgeEvent);
+    const newIds = await this.store.appendEvents(events);
+    const seen = new Set<string>();
+    const fresh = events.filter((e) => newIds.has(e.id) && !seen.has(e.id) && seen.add(e.id));
+    const duplicates = events.length - fresh.length;
     await this.queue.enqueue(fresh);
     this.metrics.inc("events_accepted", fresh.length);
     this.metrics.inc("events_duplicate", duplicates);

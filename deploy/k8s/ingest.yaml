@@ -1,0 +1,68 @@
+# Stateless: validate, store once, queue. Scaled by Keda; safe to run on Spot.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pse-ingest
+  labels: { app: pse, role: ingest }
+spec:
+  selector:
+    matchLabels: { app: pse, role: ingest }
+  template:
+    metadata:
+      labels: { app: pse, role: ingest }
+      annotations:
+        ad.datadoghq.com/api.checks: |
+          {"openmetrics": {"instances": [{"openmetrics_endpoint": "http://%%host%%:3000/metrics", "namespace": "pse", "metrics": ["pse_.*"]}]}}
+    spec:
+      nodeSelector:
+        karpenter.sh/capacity-type: spot
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector: { matchLabels: { app: pse, role: ingest } }
+      containers:
+        - name: api
+          image: plate-session-engine/api
+          env:
+            - { name: PSE_ROLE, value: ingest }
+          envFrom:
+            - configMapRef: { name: pse-config }
+            - secretRef: { name: pse-secrets }
+          ports:
+            - containerPort: 3000
+          readinessProbe:
+            httpGet: { path: /readyz, port: 3000 }
+          livenessProbe:
+            httpGet: { path: /healthz, port: 3000 }
+          resources:
+            requests: { cpu: 250m, memory: 256Mi }
+            limits: { memory: 512Mi }
+          securityContext:
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+          volumeMounts:
+            - { name: tmp, mountPath: /tmp }
+      volumes:
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pse-ingest
+spec:
+  selector: { app: pse, role: ingest }
+  ports:
+    - port: 80
+      targetPort: 3000
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: pse-ingest
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels: { app: pse, role: ingest }

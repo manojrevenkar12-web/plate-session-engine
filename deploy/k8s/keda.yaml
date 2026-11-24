@@ -1,0 +1,23 @@
+# Ingest scales on CPU and on its request rate as Datadog sees it.
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: pse-ingest
+spec:
+  scaleTargetRef:
+    name: pse-ingest
+  minReplicaCount: 2
+  maxReplicaCount: 30
+  cooldownPeriod: 300
+  triggers:
+    - type: cpu
+      metricType: Utilization
+      metadata:
+        value: "60"
+    - type: datadog
+      metadata:
+        query: "sum:pse.events_accepted.count{env:staging}.as_rate()"
+        queryValue: "2000"
+        age: "120"
+      authenticationRef:
+        name: keda-datadog

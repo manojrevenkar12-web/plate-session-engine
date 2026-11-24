@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger, type OnModuleDestroy, type OnModuleInit } from "@nestjs/common";
 import type { EdgeEvent } from "@pse/domain";
-import { createHash } from "node:crypto";
 import { Queue, Worker } from "bullmq";
+import { jobId } from "../job-id.js";
 import { SETTINGS, type Settings, shardOf } from "../settings.js";
 import { EngineService } from "./engine.service.js";
 
@@ -65,6 +65,3 @@ export class QueueService implements OnModuleInit, OnModuleDestroy {
     return n;
   }
 }
-
-/** BullMQ job ids may not contain ":"; a hash of the content also makes a retried request a no-op. */
-export const jobId = (text: string): string => createHash("sha1").update(text).digest("hex");

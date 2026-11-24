@@ -2,7 +2,8 @@ import { createHash } from "node:crypto";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { ROOT } from "@pse/engine";
-import { simulate, worldConfig } from "@pse/world";
+import type { Outcome } from "@pse/engine";
+import { simulate, type World, worldConfig } from "@pse/world";
 import { designs, runDesign } from "./run.js";
 import type { Score } from "./score.js";
 
@@ -50,6 +51,14 @@ export interface Report {
   designs: Record<string, Aggregate>;
   perSeed: Record<string, Record<string, { revenueCaptured: number; wrongPer10k: number; operatorMinutesPer1k: number }>>;
   gates: Gate[];
+  /** a few real decisions from the first seed, for the console */
+  samples?: Samples;
+}
+
+export interface Samples {
+  lookalike: { site: string; entry: string[]; exit: string[]; billed: string; amountCents: number }[];
+  typedPayment: { site: string; plate: string; typed: string; amountCents: number }[];
+  plateCheck: { site: string; read: string[]; billed: string; amountCents: number }[];
 }
 
 const CONFIG_FILES = ["engine.json", "tariffs.json", "designs.json", "gates.json"];
@@ -112,6 +121,7 @@ export function study(world: "dev" | "heldout", log: (s: string) => void = () =>
   let scanners = 0;
   let visits = 0;
   let events = 0;
+  let samples: Samples | undefined;
   for (const seed of cfg.seeds) {
     const w = simulate(cfg, seed);
     sites += w.sites.length;
@@ -122,6 +132,7 @@ export function study(world: "dev" | "heldout", log: (s: string) => void = () =>
     for (const name of names) {
       const r = runDesign(w, d.designs[name]!);
       scores[name]!.push(r.score);
+      if (name === "engine" && !samples) samples = pickSamples(w, r.outcomes);
       perSeed[seed]![name] = { revenueCaptured: r.score.revenueCaptured, wrongPer10k: r.score.wrongPer10k, operatorMinutesPer1k: r.score.operatorMinutesPer1k };
       log(`${world} seed ${seed} ${name}: revenue ${(100 * r.score.revenueCaptured).toFixed(1)}%, wrong ${r.score.wrongPer10k.toFixed(1)}/10k`);
     }
@@ -139,7 +150,33 @@ export function study(world: "dev" | "heldout", log: (s: string) => void = () =>
     designs: agg,
     perSeed,
     gates: judge(agg.engine!, world),
+    ...(samples ? { samples } : {}),
   };
+}
+
+function pickSamples(w: World, outcomes: Outcome[]): Samples {
+  const plateOf = new Map<string, string>();
+  const payments = new Map<string, string>();
+  for (const e of w.events) {
+    if (e.kind === "read") plateOf.set(e.id, e.plate);
+    if (e.kind === "payment") payments.set(e.id, e.plate);
+  }
+  const plates = (ids: string[]) => [...new Set(ids.map((i) => plateOf.get(i) ?? "?"))];
+  const out: Samples = { lookalike: [], typedPayment: [], plateCheck: [] };
+  for (const o of outcomes) {
+    const entry = plates(o.entryReads);
+    const exit = plates(o.exitReads);
+    if (o.kind === "charge" && out.lookalike.length < 4 && exit.length > 0 && entry.length > 0 && entry.join() !== exit.join()) {
+      out.lookalike.push({ site: o.site, entry, exit, billed: o.plate, amountCents: o.amountCents });
+    } else if (o.kind === "paid" && out.typedPayment.length < 4) {
+      const typed = payments.get(o.payment);
+      if (typed && typed !== o.plate) out.typedPayment.push({ site: o.site, plate: o.plate, typed, amountCents: 0 });
+    } else if (o.kind === "notice" && out.plateCheck.length < 4) {
+      const read = [...new Set([...entry, ...exit])];
+      if (read.length > 1) out.plateCheck.push({ site: o.site, read, billed: o.plate, amountCents: o.amountCents });
+    }
+  }
+  return out;
 }
 
 /** Rounds every float to 10 significant digits, so reports compare byte for byte across machines. */

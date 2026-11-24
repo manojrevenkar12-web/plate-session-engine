@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { HOUR, MINUTE } from "@pse/domain";
-import { ALL_ON, type EngineOptions, engineConfig, ROOT, SessionEngine, tariffs } from "@pse/engine";
+import { ALL_ON, type EngineOptions, engineConfig, type Outcome, ROOT, SessionEngine, tariffs } from "@pse/engine";
 import { SimulatedCropReader, SimulatedOperator, SimulatedPsp, type World } from "@pse/world";
 import { BaselineDesk, type BaselineMode } from "./baselines.js";
 import { type Score, score } from "./score.js";
@@ -26,6 +26,7 @@ export interface RunResult {
   score: Score;
   events: number;
   ms: number;
+  outcomes: Outcome[];
 }
 
 /** Plays one design through one world. Every design gets its own copy of each actor, on the same luck. */
@@ -41,7 +42,7 @@ export function runDesign(world: World, spec: DesignSpec): RunResult {
     for (const e of world.events) desk.ingest(e);
     const ms = performance.now() - t0;
     const s = score(world, desk.outcomes, psp, { operatorMinutes: 0, reviews: 0, modelCalls: reader.calls, agentAccepted: 0, alarms: [] });
-    return { score: s, events: world.events.length, ms };
+    return { score: s, events: world.events.length, ms, outcomes: desk.outcomes };
   }
   const opts: EngineOptions = { ...ALL_ON, ...(spec.engine ?? {}) };
   const engine = new SessionEngine(cfg, tariff, world.sites, world.accounts, { psp, reviewer: operator, reader }, opts);
@@ -55,5 +56,5 @@ export function runDesign(world: World, spec: DesignSpec): RunResult {
     agentAccepted: engine.stats.agentAccepted,
     alarms: engine.alarms,
   });
-  return { score: s, events: world.events.length, ms };
+  return { score: s, events: world.events.length, ms, outcomes: engine.outcomes };
 }

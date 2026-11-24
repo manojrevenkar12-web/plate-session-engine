@@ -25,6 +25,8 @@ export interface StoredAnswer {
 export interface Store {
   /** true if new; false if this event id was stored before */
   appendEvent(e: EdgeEvent): Promise<boolean>;
+  /** a batch in one write, in order; returns the ids that were new */
+  appendEvents(events: EdgeEvent[]): Promise<Set<string>>;
   /** every event in arrival order, for rebuilding the engine after a restart */
   events(): AsyncIterable<EdgeEvent>;
   saveOutcome(o: Outcome): Promise<boolean>;
@@ -50,6 +52,12 @@ export class MemoryStore implements Store {
     this.ids.add(e.id);
     this.log.push(e);
     return true;
+  }
+
+  async appendEvents(events: EdgeEvent[]): Promise<Set<string>> {
+    const fresh = new Set<string>();
+    for (const e of events) if (await this.appendEvent(e)) fresh.add(e.id);
+    return fresh;
   }
 
   async *events(): AsyncIterable<EdgeEvent> {
